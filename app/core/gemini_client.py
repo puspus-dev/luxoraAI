@@ -1,13 +1,7 @@
-import requests
-from app.config import settings
+def call_gemini(system_prompt: str, user_message: str, model: str):
+    model_name = settings.GEMINI_MODELS.get(model, "models/gemini-1.5-flash")
 
-GEMINI_URL = (
-    f"https://generativelanguage.googleapis.com/v1beta/"
-    f"{settings.GEMINI_MODEL}:generateContent"
-)
-
-def call_gemini(system_prompt: str, user_message: str) -> str:
-    headers = {"Content-Type": "application/json"}
+    url = f"https://generativelanguage.googleapis.com/v1beta/{model_name}:generateContent"
 
     payload = {
         "contents": [
@@ -21,13 +15,10 @@ def call_gemini(system_prompt: str, user_message: str) -> str:
     }
 
     response = requests.post(
-        f"{GEMINI_URL}?key={settings.GEMINI_API_KEY}",
-        headers=headers,
+        f"{url}?key={settings.GEMINI_API_KEY}",
         json=payload,
         timeout=30
     )
 
     response.raise_for_status()
-    data = response.json()
-
-    return data["candidates"][0]["content"]["parts"][0]["text"]
+    return response.json()["candidates"][0]["content"]["parts"][0]["text"]

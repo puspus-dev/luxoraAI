@@ -5,18 +5,17 @@ from app.core.luxora_prompt import build_luxora_system_prompt
 router = APIRouter()
 
 @router.post("/chat")
-def chat_with_luxora(
+def chat(
     message: str,
-    role: str = "explore",
-    mode: str = "core"
+    mode: str = "core",
+    model: str = "fast"
 ):
-    try:
-        system_prompt = build_luxora_system_prompt(role, mode)
-        response = call_gemini(system_prompt, message)
-        return {
-            "ai": "LuxoraAI",
-            "mode": mode,
-            "response": response
-        }
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    system_prompt = build_luxora_system_prompt(mode=mode)
+    response = call_gemini(system_prompt, message, model)
+
+    return {
+        "ai": "LuxoraAI",
+        "model": model,
+        "mode": mode,
+        "response": response
+    }

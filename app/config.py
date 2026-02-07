@@ -5,7 +5,9 @@ load_dotenv()
 
 class Settings:
     GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-    GEMINI_MODEL = "models/gemini-1.5-pro"
-    APP_NAME = "LuxoraAI"
+    GEMINI_MODELS = 
+    "fast": "models/gemini-1.5-flash",
+    "deep": "models/gemini-1.5-pro"
+  APP_NAME = "LuxoraAI"
 
 settings = Settings()
